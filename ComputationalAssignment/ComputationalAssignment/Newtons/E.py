@@ -18,10 +18,10 @@ def gradient(x1,x2):
 	return np.array([x_1, x_2])
 
 def hessian(x1,x2):
-	x11 = sum([ 2*(2+2*i - exp(i*x1) - exp(i*x2)) * (-1*i*i*exp(i*x1)) + 2*(-1*i*exp(i*x1)*(-1*i*exp(i*x1))) for i in range(1,11)])
+	x11 = sum([ 2*(2+2*i - exp(i*x1) - exp(i*x2)) * (-1*i*i*exp(i*x1)) + 2*(-1*i*exp(i*x1))**2 for i in range(1,11)])
 	x12 = sum([ 2*(-1*i*exp(i*x1))*(-1*i*exp(i*x2)) for i in range(1,11)])
 	x21 = x12
-	x22 = sum([ 2*(2+2*i - exp(i*x1) - exp(i*x2))*(-1*i*i*exp(i*x2)) + 2*(-1*i*exp(i*x2)*(-1*i*exp(i*x2))) for i in range(1,11)])
+	x22 = sum([ 2*(2+2*i - exp(i*x1) - exp(i*x2))*(-1*i*i*exp(i*x2)) + 2*(-1*i*exp(i*x2))**2 for i in range(1,11)])
 	return np.array([[x11,x12],[x21,x22]])
 
 

@@ -23,20 +23,12 @@ def hessian(x,y):
 
 
 
-xk = np.array([0.0,0.0])
-Dk = hessian(xk[0], xk[1])
-iterations = 1
+xk = np.array([-2.0,-2.0])
+iterations = 0
 while True:
 	prev = np.array([x for x in xk])
-	xk -= np.matmul(np.linalg.inv(Dk), gradient(xk[0], xk[1]))
-	dk = xk - prev
-	yk = gradient(xk[0], xk[1]) - gradient(prev[0], prev[1])
-
-	term1 = np.matmul(yk, np.transpose(yk))/(np.matmul(np.transpose(yk), dk))
-	term2num = np.matmul(np.matmul(Dk, dk), np.transpose(dk))*Dk
-	term2den = np.matmul(np.matmul(np.transpose(dk), Dk), dk)
-	Dk = Dk + term1 + term2num/term2den
-
+	dk = -1*np.matmul(np.linalg.inv(hessian(xk[0], xk[1])),gradient(xk[0], xk[1]))
+	xk += dk
 	if abs(norm(prev) - norm(xk)) < epsilon:
 		print("Iterations: ", iterations)
 		print("Minimizer: ", xk)
