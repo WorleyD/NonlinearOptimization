@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-epsilon = 0.000000001
+epsilon = 0.0000001
 
 def norm(x):
 	x = x.tolist()

@@ -1,7 +1,7 @@
 import numpy as np
 from math import sin,cos, sqrt
 
-epsilon = 0.000001
+epsilon = 0.0000001
 
 
 def norm(x):
@@ -13,14 +13,14 @@ def f(x1,x2):
 
 def gradient(x1,x2):
 	x_1 = 2*(2*x1**3 + x2**3 + 3*x1*x1*x2 + 3*x1*x2*x2 + sin(x1)*cos(x1))
-	x_2 = 2*(2*x2**3 + x1**3 + 3*x1*x1*x2 + 3*x1*x2*x2 + sin(x2)*cos(x2))
+	x_2 = 2*(2*x2**3 + x1**3 + 3*x1*x1*x2 + 3*x1*x2*x2 - sin(x2)*cos(x2))
 	return np.array([x_1,x_2])
 
 def hessian(x1,x2):
 	x11 = 2*(6*x1*x1 + 6*x1*x2 + 3*x2*x2 + (cos(x1)*cos(x1) - sin(x1)*sin(x1)))
 	x12 = 2*(3*x2*x2 + 3*x1*x1 + 6*x1*x2)
 	x21 = x12
-	x22 = 2*(6*x2*x2 + 6*x1*x2 + 3*x1*x1 + (cos(x2)*cos(x2) - sin(x2)*sin(x2)))
+	x22 = 2*(6*x2*x2 + 6*x1*x2 + 3*x1*x1 + (sin(x2)*sin(x2) - cos(x2)*cos(x2)))
 	return np.array([[x11,x12],[x21,x22]])
 
 

@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-epsilon = 0.000001
+epsilon = 0.0000001
 
 #helper function for that ugly sum to make the rest of the program nicer
 def h(x):

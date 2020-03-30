@@ -1,7 +1,7 @@
 import numpy as np
 from math import exp, sqrt
 
-epsilon = 0.000001
+epsilon = 0.0000001
 
 
 def norm(x):

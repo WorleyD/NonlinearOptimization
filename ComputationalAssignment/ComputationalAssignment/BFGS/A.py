@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-epsilon = 0.000001
+epsilon = 0.0000001
 
 def norm(x):
 	x = x.tolist()
@@ -22,7 +22,6 @@ def hessian(x1,x2):
 	x_21 = x_12
 	x_22 = 24*x1 + 60*x2**4 - 160*x2**3 + 24*x2**2 - 480*x2 + 24
 	return np.array([[x_11, x_12], [x_21, x_22]])
-
 
 xk = np.array([10.0,10.0])
 Dk = hessian(xk[0], xk[1])

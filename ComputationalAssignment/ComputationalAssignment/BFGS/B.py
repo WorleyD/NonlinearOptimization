@@ -1,30 +1,33 @@
 import numpy as np
 import math
 
-epsilon = 0.000001
+epsilon = 0.0000001
 
+#helper function for that ugly sum to make the rest of the program nicer
+def h(x):
+	return sum([i**3*(x[i-1]-1)**2 for i in range(1,11)])
 
 def norm(x):
 	x = x.tolist()
 	return math.sqrt(sum([xi*xi for xi in x]))
 
 def f(x):
-	return (sum([i**3*(x[i-1]-1)**2 for i in range(1,11)]))**3
+	return h(x)**3
 
 # x is a vector with 10 elements
 def gradient(x):
-	return None if len(x) != 10 else np.array([(3*(sum([(i**3)*(x[i-1]-1)**2 for i in range(1,11)]))**2)*(2*i**3)*(x[i-1]-1) for i in range(1,11)])
+	return np.array([h(x)**2*(2*j**3*(x[j-1]-1)) for j in range(1,11)])
 
 
 def hessian(x):
 	hf = []
 	for i in range(1,11):
-		g_i = sum([i*i*i*(x[i-1]-1)**2])*(2*i*i*(x[i-1]-1))
+		g_i = 6*h(x)*(2*i**3*(x[i-1]-1))
 		rowi = []
 		for j in range(1,11):
-			xij = g_i * (2*i**3*(x[j-1]-1))
+			xij = g_i * (2*j**3*(x[j-1]-1))
 			if i == j:
-				xij += 3*(sum([i**3*(x[i-1]-1)]))*2*i**3
+				xij += 3*(h(x)**2)*(2*i**3)
 			rowi.append(xij)
 		hf.append(rowi)
 

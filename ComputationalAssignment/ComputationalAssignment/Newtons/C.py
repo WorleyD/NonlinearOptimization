@@ -1,7 +1,7 @@
 import numpy as np
 from math import sin,cos, sqrt
 
-epsilon = 0.00001
+epsilon = 0.0000001
 
 
 def norm(x):

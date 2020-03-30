@@ -24,8 +24,7 @@ A = np.array([
 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 2 ],
 ])
 
-epsilon = 0.000001
-singular = False
+epsilon = 0.0000001
 
 def norm(x):
 	x = x.tolist()
@@ -50,10 +49,7 @@ xk = np.array([10.0]*20)
 iterations = 1
 while True:
 	prev = np.array([x for x in xk])
-	try:
-		dk = -1*np.matmul(np.linalg.inv(hessian(xk)),gradient(xk))
-	except np.linalg.linalg.LinAlgError:
-		singular = True
+	dk = -1*np.matmul(np.linalg.inv(hessian(xk)),gradient(xk))
 
 	xk += dk
 	if abs(norm(prev) - norm(xk)) < epsilon or singular:
