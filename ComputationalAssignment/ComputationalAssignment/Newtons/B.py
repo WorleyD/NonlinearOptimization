@@ -2,7 +2,6 @@ import numpy as np
 import math
 
 epsilon = 0.000001
-singular = False
 
 def norm(x):
 	x = x.tolist()
@@ -13,7 +12,7 @@ def f(x):
 
 # x is a vector with 10 elements
 def gradient(x):
-	return None if len(x) != 10 else np.array([(3*(sum([(i**3)*(x[i-1]-1)**2 for i in range(1,11)]))**2)*(2*i**3)*(x[i-1]-1) for i in range(1,11)])
+	return np.array([(3*(sum([(i**3)*(x[i-1]-1)**2 for i in range(1,11)]))**2)*(2*i**3)*(x[i-1]-1) for i in range(1,11)])
 
 
 def hessian(x):
@@ -31,16 +30,13 @@ def hessian(x):
 	return np.array(hf)
 
 
-xk = np.array([-1.0]*10)
+xk = np.array([10.0]*10)
 iterations = 1
 while True:
 	prev = np.array([x for x in xk])
-	try:
-		dk = -1*np.matmul(np.linalg.inv(hessian(xk)),gradient(xk))
-		xk += dk
-	except np.linalg.linalg.LinAlgError:
-		singular = True
-	if abs(norm(prev) - norm(xk)) < epsilon or singular:
+	dk = -1*np.matmul(np.linalg.inv(hessian(xk)),gradient(xk))
+	xk += dk
+	if abs(norm(prev) - norm(xk)) < epsilon:
 		print("Iterations: ", iterations)
 		print("Minimizer: ", xk)
 		print("Minimum: ", f(xk))
