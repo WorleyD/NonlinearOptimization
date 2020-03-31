@@ -45,19 +45,6 @@ def gradient(x):
 def hessian(x):
 	return 2*A
 
-def backtrack(x):
-	a = 0.5
-	p =0.75
-	t = 1
-
-	g = gradient(x)
-	newx = x - t*g
-	while f(newx[0], newx[1]) > f(x[0], x[1]) - t*a*(norm(g))**2:
-		t *= p
-		newx = x - t*g
-	return p 
-
-
 
 xk = np.asmatrix(np.array([10.0 for i in range(20)]))
 Dk = hessian(xk)
@@ -68,6 +55,7 @@ while True:
 	prev = np.asmatrix(np.array([x for x in xk]))
 	dk = np.matmul(np.linalg.inv(Dk), -1*np.transpose(gradient(xk)))
 	
+
 	xk =  xk + np.asarray(np.transpose(dk))[0]
 	
 	

@@ -30,18 +30,6 @@ def hessian(x):
 	x_22 = 24*x1 + 60*x2**4 - 160*x2**3 + 24*x2**2 - 480*x2 + 24
 	return np.asmatrix([[x_11, x_12], [x_21, x_22]])
 
-def backtrack(x):
-	a = 0.5
-	p =0.75
-	t = 1
-
-	g = gradient(x[0],x[1])
-	newx = x - t*g
-	while f(newx[0], newx[1]) > f(x[0], x[1]) - t*a*(norm(g))**2:
-		t *= p
-		newx = x - t*g
-	return p 
-
 
 xk = np.asmatrix(np.array([10.0,10.0]))
 Dk = hessian(xk)

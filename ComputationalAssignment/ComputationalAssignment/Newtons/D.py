@@ -52,7 +52,7 @@ while True:
 	dk = -1*np.matmul(np.linalg.inv(hessian(xk)),gradient(xk))
 
 	xk += dk
-	if abs(norm(prev) - norm(xk)) < epsilon or singular:
+	if abs(norm(prev) - norm(xk)) < epsilon:
 		print("Iterations: ", iterations)
 		print("Minimizer: ", xk)
 		print("Minimum: ", f(xk))
