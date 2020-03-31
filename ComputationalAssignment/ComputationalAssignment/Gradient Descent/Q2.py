@@ -21,6 +21,17 @@ def hessian(x,y):
 	x22 = 200
 	return np.array([[x11,x12],[x21,x22]])
 
+def backtrack(x):
+	a = 0.5
+	p =0.75
+	t = 1
+
+	g = gradient(x)
+	newx = x - t*g
+	while f(newx[0], newx[1]) > f(x[0], x[1]) - t*a*(norm(g))**2:
+		t *= p
+		newx = x - t*g
+	return p
 
 
 xk = np.array([-2.0,-2.0])
@@ -29,7 +40,7 @@ while True:
 	prev = np.array([x for x in xk])
 	dk = -1*np.matmul(np.linalg.inv(hessian(xk[0], xk[1])),gradient(xk[0], xk[1]))
 	xk += dk
-	if abs(norm(prev) - norm(xk)) < epsilon:
+	if abs(norm(gradient(prev)) - norm(gradient(xk))) < epsilon:
 		print("Iterations: ", iterations)
 		print("Minimizer: ", xk)
 		print("Minimum: ", f(xk[0], xk[1]))

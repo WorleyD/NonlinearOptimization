@@ -54,7 +54,7 @@ def backtrack(x):
 xk = np.asmatrix(np.array([2.0 for i in range(10)]))
 Dk = hessian(xk)
 #Dk = np.array([[1,0],[0,1]])
-iterations = 1
+iterations = 0
 
 while True:
 	prev = np.asmatrix(np.array([x for x in xk]))

@@ -25,7 +25,7 @@ def hessian(x1,x2):
 
 
 xk = np.array([10.0,10.0])
-iterations = 1
+iterations = 0
 while True:
 	prev = np.array([x for x in xk])
 	dk = -1*np.matmul(np.linalg.inv(hessian(xk[0], xk[1])),gradient(xk[0], xk[1]))
