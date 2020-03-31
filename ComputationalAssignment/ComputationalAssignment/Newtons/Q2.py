@@ -29,7 +29,7 @@ while True:
 	prev = np.array([x for x in xk])
 	dk = -1*np.matmul(np.linalg.inv(hessian(xk[0], xk[1])),gradient(xk[0], xk[1]))
 	xk += dk
-	if abs(norm(gradient(prev[0], prev[1])) - norm(gradient(xk[0], xk[1]))) < epsilon:
+	if norm(gradient(xk[0], xk[1])) < epsilon:
 		print("Iterations: ", iterations)
 		print("Minimizer: ", xk)
 		print("Minimum: ", f(xk[0], xk[1]))

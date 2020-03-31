@@ -51,7 +51,7 @@ while True:
 	#print(xk)
 	if np.isnan(xk[0]):
 		break
-	if abs(norm(gradient(prev[0], prev[1])) - norm(gradient(xk[0], xk[1]))) < epsilon:
+	if norm(gradient(xk[0], xk[1])) < epsilon:
 		print("Iterations: ", iterations)
 		print("Minimizer: ", xk)
 		print("Minimum: ", f(xk[0], xk[1]))
