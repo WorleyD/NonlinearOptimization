@@ -5,21 +5,26 @@ epsilon = 0.0000001
 
 #helper function for that ugly sum to make the rest of the program nicer
 def h(x):
+	x = np.array(x).tolist()
 	return sum([i**3*(x[i-1]-1)**2 for i in range(1,11)])
 
 def norm(x):
-	x = x.tolist()
+	x = x.tolist()[0]
 	return math.sqrt(sum([xi*xi for xi in x]))
 
 def f(x):
+	x = np.array(x)[0]
+
 	return h(x)**3
 
 # x is a vector with 10 elements
 def gradient(x):
-	return np.array([h(x)**2*(2*j**3*(x[j-1]-1)) for j in range(1,11)])
+	x = x.tolist()[0]
+	return np.asmatrix([h(x)**2*(2*j**3*(x[j-1]-1)) for j in range(1,11)])
 
 
 def hessian(x):
+	x = x.tolist()[0]
 	hf = []
 	for i in range(1,11):
 		g_i = 6*h(x)*(2*i**3*(x[i-1]-1))
@@ -31,28 +36,49 @@ def hessian(x):
 			rowi.append(xij)
 		hf.append(rowi)
 
-	return np.array(hf)
+	return np.asmatrix(hf)
+
+def backtrack(x):
+	a = 0.5
+	p =0.75
+	t = 1
+
+	g = gradient(x)
+	newx = x - t*g
+	while f(newx[0], newx[1]) > f(x[0], x[1]) - t*a*(norm(g))**2:
+		t *= p
+		newx = x - t*g
+	return p 
 
 
-xk = np.array([0.0]*10)
+xk = np.asmatrix(np.array([2.0 for i in range(10)]))
 Dk = hessian(xk)
+#Dk = np.array([[1,0],[0,1]])
 iterations = 1
-singular = False
+
 while True:
-	prev = np.array([x for x in xk])
-	try: 
-		xk -= np.matmul(np.linalg.inv(Dk), gradient(xk))
+	prev = np.asmatrix(np.array([x for x in xk]))
+	try:
+		dk = np.matmul(np.linalg.inv(Dk), -1*np.transpose(gradient(xk)))
 	except np.linalg.linalg.LinAlgError:
-		singular = True
-	dk = xk - prev
+		pass
+
+	xk =  xk + np.asarray(np.transpose(dk))[0]
+	
+	
 	yk = gradient(xk) - gradient(prev)
 
-	term1 = np.matmul(yk, np.transpose(yk))/(np.matmul(np.transpose(yk), dk))
-	term2num = np.matmul(np.matmul(Dk, dk), np.transpose(dk))*Dk
-	term2den = np.matmul(np.matmul(np.transpose(dk), Dk), dk)
-	Dk = Dk + term1 + term2num/term2den
 
-	if abs(norm(prev) - norm(xk)) < epsilon or singular:
+	t1 = np.matmul(np.transpose(yk), np.asmatrix(yk))
+	t2 = np.matmul(yk, dk)
+	
+	t3 = np.matmul(Dk, np.matmul(dk,np.matmul(np.transpose(dk), np.transpose(Dk))))
+	t4 = np.matmul(np.transpose(dk), np.matmul(Dk, dk))
+
+	Dk = Dk + t1/t2 - t3/t4 
+
+
+	if abs(norm(prev) - norm(xk)) < epsilon:
 		print("Iterations: ", iterations)
 		print("Minimizer: ", xk)
 		print("Minimum: ", f(xk))
