@@ -2,6 +2,9 @@ import numpy as np
 import math
 epsilon = 0.000001
 
+
+# Newtons returns min 0 at [1,1] after 5 iterations
+
 def norm(x):
 	x = x.tolist()
 	return math.sqrt(sum([xi*xi for xi in x]))
@@ -21,26 +24,34 @@ def hessian(x,y):
 	x22 = 200
 	return np.array([[x11,x12],[x21,x22]])
 
+
 def backtrack(x):
-	a = 0.5
-	p =0.75
+	g = gradient(x[0], x[1])	
+	
+	dx = -1*g
+
+	a = 0.10	#initial backtrack amount
+	l = 0.25	#amount to decrease by		
+	
 	t = 1
-
-	g = gradient(x)
-	newx = x - t*g
-	while f(newx[0], newx[1]) > f(x[0], x[1]) - t*a*(norm(g))**2:
-		t *= p
-		newx = x - t*g
-	return p
+	while f(x[0], x[1]) + a*t*np.dot(g, dx) < f(x[0] + t*dx[0], x[1] + t*dx[1]):
+		t *= l
+		
+	return t
 
 
-xk = np.array([-2.0,-2.0])
+xk = np.array([-2.0,2.0])
 iterations = 0
 while True:
 	prev = np.array([x for x in xk])
-	dk = -1*np.matmul(np.linalg.inv(hessian(xk[0], xk[1])),gradient(xk[0], xk[1]))
-	xk += dk
-	if abs(norm(gradient(prev)) - norm(gradient(xk))) < epsilon:
+	dk = -1*gradient(xk[0], xk[1])
+	t = backtrack(xk)
+	#print("t:", t)
+	xk += t*dk
+	#print(xk)
+	if np.isnan(xk[0]):
+		break
+	if abs(norm(gradient(prev[0], prev[1])) - norm(gradient(xk[0], xk[1]))) < epsilon:
 		print("Iterations: ", iterations)
 		print("Minimizer: ", xk)
 		print("Minimum: ", f(xk[0], xk[1]))

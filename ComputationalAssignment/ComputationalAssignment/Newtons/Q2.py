@@ -23,7 +23,7 @@ def hessian(x,y):
 
 
 
-xk = np.array([-2.0,-2.0])
+xk = np.array([-2.0,2.0])
 iterations = 0
 while True:
 	prev = np.array([x for x in xk])
