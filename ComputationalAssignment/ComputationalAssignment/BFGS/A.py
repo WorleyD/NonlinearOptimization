@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-epsilon = 0.0000001
+epsilon = 0.00000001
 
 def norm(x):
 	x = x.tolist()
@@ -23,19 +23,33 @@ def hessian(x1,x2):
 	x_22 = 24*x1 + 60*x2**4 - 160*x2**3 + 24*x2**2 - 480*x2 + 24
 	return np.array([[x_11, x_12], [x_21, x_22]])
 
+def backtrack(x):
+	a = 0.5
+	p =0.75
+	t = 1
+
+	g = gradient(x[0],x[1])
+	newx = x - t*g
+	while f(newx[0], newx[1]) > f(x[0], x[1]) - t*a*(norm(g))**2:
+		t *= p
+		newx = x - t*g
+	return p 
+
+
 xk = np.array([10.0,10.0])
 Dk = hessian(xk[0], xk[1])
+#Dk = np.array([[1,0],[0,1]])
 iterations = 1
+
 while True:
 	prev = np.array([x for x in xk])
-	xk -= np.matmul(np.linalg.inv(Dk), gradient(xk[0], xk[1]))
-	dk = xk - prev
+	dk = np.matmul(np.linalg.inv(Dk), gradient(xk[0], xk[1]))
+	
+	xk = xk - dk
 	yk = gradient(xk[0], xk[1]) - gradient(prev[0], prev[1])
 
-	term1 = np.matmul(yk, np.transpose(yk))/(np.matmul(np.transpose(yk), dk))
-	term2num = np.matmul(np.matmul(Dk, dk), np.transpose(dk))*Dk
-	term2den = np.matmul(np.matmul(np.transpose(dk), Dk), dk)
-	Dk = Dk + term1 + term2num/term2den
+	Dk = Dk + t1 - t2/(np.matmul(np.transpose(dk), np.matmul(Dk, dk))) 
+
 
 	if abs(norm(prev) - norm(xk)) < epsilon:
 		print("Iterations: ", iterations)

@@ -25,20 +25,38 @@ def hessian(x1,x2):
 	return np.array([[x11,x12],[x21,x22]])
 
 
+def backtrack(x):
+	a = 0.5
+	p =0.75
+	t = 1
 
-xk = np.array([0.0,0.0])
+	g = gradient(x[0],x[1])
+	newx = x - t*g
+	while f(newx[0], newx[1]) > f(x[0], x[1]) - t*a*(norm(g))**2:
+		t *= p
+		newx = x - t*g
+	return p 
+
+
+xk = np.array([5.0,5.0])
 Dk = hessian(xk[0], xk[1])
 iterations = 1
+
 while True:
 	prev = np.array([x for x in xk])
-	xk -= np.matmul(np.linalg.inv(Dk), gradient(xk[0], xk[1]))
-	dk = xk - prev
+	dk = np.matmul(np.linalg.inv(Dk), -1*gradient(xk[0], xk[1]))
+
+	a = backtrack(xk)
+	sk = a*dk
+	
+	xk += sk
 	yk = gradient(xk[0], xk[1]) - gradient(prev[0], prev[1])
 
-	term1 = np.matmul(yk, np.transpose(yk))/(np.matmul(np.transpose(yk), dk))
-	term2num = np.matmul(np.matmul(Dk, dk), np.transpose(dk))*Dk
-	term2den = np.matmul(np.matmul(np.transpose(dk), Dk), dk)
-	Dk = Dk + term1 + term2num/term2den
+	t1 = np.matmul(yk, np.transpose(yk))/(np.matmul(np.transpose(yk), sk))
+	t2 = np.matmul(np.matmul(Dk, sk), np.matmul(np.transpose(sk), np.transpose(Dk)))
+
+	Dk = Dk + t1 - t2/(np.matmul(np.transpose(sk), np.matmul(Dk, sk))) 
+
 
 	if abs(norm(prev) - norm(xk)) < epsilon:
 		print("Iterations: ", iterations)
@@ -47,6 +65,7 @@ while True:
 		break
 
 	iterations += 1
+
 
 '''
 #Test if it errors out
